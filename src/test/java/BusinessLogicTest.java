@@ -8,15 +8,15 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.ejb.EJB;
+import javax.inject.Inject;
 
 @RunWith(Arquillian.class)
 public class BusinessLogicTest {
 
-    @EJB
+    @Inject
     PersistBean persistBean;
 
-    @EJB
+    @Inject
     MergeBean mergeBean;
 
     @Deployment

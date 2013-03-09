@@ -3,7 +3,6 @@ package com.piotrnowicki.spikes.boundary;
 import com.piotrnowicki.spikes.entity.MyEntity;
 
 import javax.annotation.Resource;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -21,9 +20,6 @@ public class UtilsBean {
 
     @Resource
     private TransactionSynchronizationRegistry tsr;
-
-    @EJB
-    private UtilsBean self;
 
     public void readAllEntities() {
         List<MyEntity> resultList = em.createNamedQuery("MyEntity.FIND_ALL", MyEntity.class).getResultList();
