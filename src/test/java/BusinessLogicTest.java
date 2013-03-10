@@ -1,5 +1,5 @@
+import com.piotrnowicki.spikes.boundary.BMTMergeBean;
 import com.piotrnowicki.spikes.boundary.MergeBean;
-import com.piotrnowicki.spikes.boundary.PersistBean;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -9,15 +9,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
+import javax.transaction.*;
 
 @RunWith(Arquillian.class)
 public class BusinessLogicTest {
 
     @Inject
-    PersistBean persistBean;
+    MergeBean mergeBean;
 
     @Inject
-    MergeBean mergeBean;
+    BMTMergeBean bmtMergeBean;
 
     @Deployment
     public static JavaArchive createDeployment() {
@@ -26,12 +27,12 @@ public class BusinessLogicTest {
     }
 
     @Test
-    public void shouldPersistEntity() {
-        persistBean.persistEntity();
+    public void shouldMergeEntity() {
+        mergeBean.mergeEntity();
     }
 
     @Test
-    public void shouldMergeEntity() {
-        mergeBean.mergeEntity();;
+    public void shouldBMTMergeEntity() throws HeuristicRollbackException, HeuristicMixedException, NotSupportedException, RollbackException, SystemException {
+        bmtMergeBean.mergeEntity();
     }
 }

@@ -7,23 +7,24 @@ import javax.ejb.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.transaction.*;
 
 @Stateless
-public class MergeBean {
+@TransactionManagement(TransactionManagementType.BEAN)
+public class BMTMergeBean {
 
     @PersistenceContext
     private EntityManager em;
 
     @Resource
-    private SessionContext sctx;
+    private UserTransaction utx;
 
     @EJB
     private UtilsBean utilsBean;
 
-    @EJB
-    private MergeBean self;
+    public void mergeEntity() throws SystemException, NotSupportedException, HeuristicRollbackException, HeuristicMixedException, RollbackException {
+        utx.begin();
 
-    public void mergeEntity() {
         MyEntity entity = new MyEntity("entityName", "OK", "DEFAULT");
 
         utilsBean.log("----------------------------------------------------");
@@ -31,23 +32,11 @@ public class MergeBean {
 
         em.persist(entity);
 
-        try {
-            self.tryMergingEntity(entity);
-        } catch (UpdateException ex) {
-            utilsBean.log("Application Exception caught. Will this exception mark tx for rollback: " + sctx.getRollbackOnly());
+        utx.commit();
 
-            entity.setContent("");
-            entity.setCode("ERROR");
 
-            utilsBean.log("Setting fail-safe attributes of the entity: " + entity);
-        }
+        utx.begin();
 
-        utilsBean.readAllEntities();
-        utilsBean.log("----------------------------------------------------");
-    }
-
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void tryMergingEntity(final MyEntity entity) throws UpdateException {
         entity.setContent("tooLongContentValue");
 
         em.merge(entity);
@@ -58,10 +47,23 @@ public class MergeBean {
             em.flush();
         } catch (PersistenceException e) {
             utilsBean.log("PersistenceException caught while merging entity: " + entity);
-            utilsBean.log("Should the transaction be rolled back? " + sctx.getRollbackOnly());
+            utilsBean.log("Should the transaction be rolled back? " + (utx.getStatus() == Status.STATUS_MARKED_ROLLBACK));
             utilsBean.log("Is the entity managed? " + em.contains(entity));
 
-            throw new UpdateException();
+            utx.rollback();
+
+            utx.begin();
+            entity.setContent("");
+            entity.setCode("ERROR");
+
+            utilsBean.log("Setting fail-safe attributes of the entity: " + entity);
+
+            em.merge(entity);
+
+            utx.commit();
         }
+
+        utilsBean.readAllEntities();
+        utilsBean.log("----------------------------------------------------");
     }
 }
