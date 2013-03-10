@@ -1,4 +1,4 @@
-package com.piotrnowicki.spikes.entity;
+package com.piotrnowicki.jpacmt.entity;
 
 import javax.persistence.*;
 
@@ -18,7 +18,10 @@ public class MyEntity {
     @Column(length = 10)
     private String content;
 
-    public MyEntity() {
+    /**
+     * For JPA purposes only.
+     */
+    MyEntity() {
     }
 
     public MyEntity(String name, String code, String content) {

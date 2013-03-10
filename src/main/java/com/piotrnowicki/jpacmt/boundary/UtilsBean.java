@@ -1,6 +1,6 @@
-package com.piotrnowicki.spikes.boundary;
+package com.piotrnowicki.jpacmt.boundary;
 
-import com.piotrnowicki.spikes.entity.MyEntity;
+import com.piotrnowicki.jpacmt.entity.MyEntity;
 
 import javax.annotation.Resource;
 import javax.ejb.Stateless;

@@ -1,5 +1,5 @@
-import com.piotrnowicki.spikes.boundary.BMTMergeBean;
-import com.piotrnowicki.spikes.boundary.MergeBean;
+import com.piotrnowicki.jpacmt.boundary.BMTMergeBean;
+import com.piotrnowicki.jpacmt.boundary.MergeBean;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -23,7 +23,7 @@ public class BusinessLogicTest {
     @Deployment
     public static JavaArchive createDeployment() {
         return ShrinkWrap.create(JavaArchive.class)
-                .addPackages(true, "com.piotrnowicki.spikes").addAsManifestResource("META-INF/persistence.xml", "persistence.xml").addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+                .addPackages(true, "com.piotrnowicki.jpacmt").addAsManifestResource("META-INF/persistence.xml", "persistence.xml").addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 
     @Test

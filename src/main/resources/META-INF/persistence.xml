@@ -2,6 +2,7 @@
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
 
     <persistence-unit name="myPU">
+        <!-- Configure it to point to your available datasource on the AS -->
         <jta-data-source>java:jboss/datasources/myPU</jta-data-source>
 
         <properties>

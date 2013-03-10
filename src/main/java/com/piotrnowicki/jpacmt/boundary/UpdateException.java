@@ -1,4 +1,4 @@
-package com.piotrnowicki.spikes.boundary;
+package com.piotrnowicki.jpacmt.boundary;
 
 import javax.ejb.ApplicationException;
 
